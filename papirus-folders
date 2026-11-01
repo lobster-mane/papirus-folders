@@ -56,7 +56,7 @@ usage() {
 	cat <<- EOF
 	USAGE
 	  $ $PROGNAME [options] -t <theme> {-C --color} <color>
-	  $ $PROGNAME [options] -t <theme> {-N --new} <color> --shadow <#rrggbb> --accent-dark <#rrggbb> --accent <#rrggbb>
+	  $ $PROGNAME [options] -t <theme> {-N --new} <color> --shadow <rrggbb> --accent-dark <rrggbb> --accent <rrggbb>
 	  $ $PROGNAME [options] -t <theme> {-D --default}
 	  $ $PROGNAME [options] -t <theme> {-R --restore}
 
@@ -75,6 +75,10 @@ usage() {
 	  -V --version        print $PROGNAME version and exit
 	  -v --verbose        be verbose
 	  -h --help           show this help
+
+	NOTES
+	  Hex colors can be given as rrggbb or '#rrggbb'. Quote them when they
+	  start with '#' to prevent the shell from treating them as comments.
 	EOF
 
 	exit "${1:-0}"
@@ -120,29 +124,31 @@ _is_valid_color() {
 	return 1
 }
 
-# Validate a single hex: must be #rrggbb
+# Validate a single hex: #rrggbb or rrggbb
 _is_valid_hex() {
 	local hex="$1"
-	if ! [[ "$hex" =~ ^\#[0-9A-Fa-f]{6}$ ]]; then
-		err "Invalid hex color: '$hex'. Must be in format #rrggbb"
-		return 0
-	else
-		return 1
-	fi
+
+	[[ "$hex" =~ ^\#?[0-9A-Fa-f]{6}$ ]]
 }
 
-# Validate all hexes
+# Validate and normalize all hexes
 validate_hexes() {
-	local colors=("$COLOR_SHADOW" "$COLOR_ACCENT_DARK" "$COLOR_ACCENT")
-	local validated=1
+	local c valid=1
+	local -a colors=("$COLOR_SHADOW" "$COLOR_ACCENT_DARK" "$COLOR_ACCENT")
+
 	for c in "${colors[@]}"; do
-		if _is_valid_hex "$c"; then
-			validated=0
+		if ! _is_valid_hex "$c"; then
+			err "Invalid hex color: '$c'. Must be in format #rrggbb or rrggbb"
+			valid=0
 		fi
 	done
-	if [ ! $validated -eq 1 ]; then
-		fatal "One or more arguments have invalid hex colors."
-	fi
+
+	[ "$valid" -eq 1 ] || fatal "One or more arguments have invalid hex colors."
+
+	# Add a leading '#' when it was omitted
+	COLOR_SHADOW="#${COLOR_SHADOW#\#}"
+	COLOR_ACCENT_DARK="#${COLOR_ACCENT_DARK#\#}"
+	COLOR_ACCENT="#${COLOR_ACCENT#\#}"
 }
 
 declare_colors() {
