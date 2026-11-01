@@ -46,18 +46,20 @@ _papirus_folders() {
 		-V --version
 		-v --verbose
 		-C --color
+		-N --new
 		-D --default
 		-R --restore
 		-l --list
 		-o --once
 		-t --theme
 		-u --update-caches
+		-y --force
 	)
 
 	_get_comp_words_by_ref cur prev
 
 	case "$prev" in
-		-C|--color)
+		-C|--color|-N|--new)
 			COMPREPLY=( $(compgen -W "${colors[*]}" -- "${cur}") )
 			return
 			;;

@@ -111,6 +111,18 @@ papirus-folders -l --theme Papirus-Dark
 papirus-folders -C brown --theme Papirus-Dark
 ```
 
+#### Create a new color scheme or modify an existing one for Papirus
+
+```
+papirus-folders -N custom --shadow '#1d344f' --accent-dark '#4877b1' --accent '#5294e2' --theme Papirus
+```
+
+If the `custom` scheme already exists, you will be asked whether to overwrite it. Use `-y` or `--force` to skip this confirmation:
+
+```
+papirus-folders -N custom --shadow '#1d344f' --accent-dark '#4877b1' --accent '#5294e2' --theme Papirus --force
+```
+
 #### Revert to default color of folders for Papirus-Dark
 
 ```

@@ -46,11 +46,13 @@ _arguments -C \
 	'(-V --version)'{-V,--version}'[show version number and exit]' \
 	'(-v --verbose)'{-v,--verbose}'[be verbose]' \
 	'(-C --color)'{-C,--color}'[change color of folders]:color:_get_colors' \
+	'(-N --new)'{-N,--new}'[create a new color scheme or modify an existing one]:color:_get_colors' \
 	'(-D --default)'{-D,--default}'[back to the default color]' \
 	'(-R --restore)'{-R,--restore}'[restore the last used color from the config file]' \
 	'(-l --list)'{-l,--list}'[show available colors]' \
 	'(-o --once)'{-o,--once}'[do not save the changes to the config file]' \
 	'(-t --theme)'{-t,--theme}'[make changes to the specified theme]:icon-theme:_get_themes' \
-	'(-u --update-caches)'{-u,--update-caches}'[update icon caches]'
+	'(-u --update-caches)'{-u,--update-caches}'[update icon caches]' \
+	'(-y --force)'{-y,--force}'[overwrite an existing color scheme without asking]'
 
 # vim: ft=zsh sw=4 ts=4
